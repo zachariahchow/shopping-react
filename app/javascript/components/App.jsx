@@ -1,5 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { BrowserRouter, Router } from 'react-router-dom';
+
+import Header from './layout/Header';
+import Nav from './layout/Nav';
 import SearchInput from './Search/SearchInput';
 import SearchResults from './Search/SearchResults';
 import Cart from './Cart/Cart';
@@ -91,19 +95,20 @@ const App = () => {
         const updatedCartItems = cartItems
             .filter(item => item.id !== removedProduct.id);
 
-        console.log(updatedCartItems);
         setCartItems(updatedCartItems);
 
         searchedProducts.splice(removedProduct.id - 1, 0, removedProduct);
-        console.log(searchProducts);
+
         setSearchedProducts(searchedProducts);
     }
 
     return (
         <main>
-            <SearchInput changeHandler={searchInputChangeHandler} clickHandler={submitBtnClickHandler}/>
-            <Cart products={cartItems} clickHandler={removeFromCartClickHandler}/>
-            {productList ? <SearchResults products={searchedProducts} clickHandler={addToCartClickHandler}/> : null}
+            <Header />
+            <Nav />
+                <SearchInput changeHandler={searchInputChangeHandler} clickHandler={submitBtnClickHandler}/>
+                <Cart products={cartItems} clickHandler={removeFromCartClickHandler}/>
+                {productList ? <SearchResults products={searchedProducts} clickHandler={addToCartClickHandler}/> : null}
         </main>
     );
 }

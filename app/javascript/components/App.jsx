@@ -19,16 +19,11 @@ const App = () => {
         try {
 
             const url = '/products.json';
-
             const response = await axios.get(url);
-
             setProductList(response.data);
 
-
         } catch (e) {
-
             console.log(e);
-
         }
     }
 
@@ -40,19 +35,14 @@ const App = () => {
 
     const searchInputChangeHandler = (ev) => {
         setSearchInputValue(ev.target.value);
-        console.log(searchInputValue);
     }
 
     const submitBtnClickHandler = (ev) => {
 
         const filteredProducts = productList
             .filter(product => {
-                console.log(product.name.toLowerCase());
-                console.log(searchInputValue);
                 return product.name.toLowerCase().includes(searchInputValue.toLowerCase());
             });
-
-        console.log(filteredProducts);
 
         if (filteredProducts.length > 0)
             setSearchedProducts(filteredProducts);

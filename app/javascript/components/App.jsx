@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Header from './layout/Header';
+import Nav from './layout/Nav';
 import SearchInput from './Search/SearchInput';
 import SearchResults from './Search/SearchResults';
 import Cart from './Cart/Cart';
@@ -103,6 +104,7 @@ const App = () => {
     return (
         <main>
             <Header />
+            <Nav />
             <SearchInput changeHandler={searchInputChangeHandler} clickHandler={submitBtnClickHandler}/>
             <Cart products={cartItems} clickHandler={removeFromCartClickHandler}/>
             {productList ? <SearchResults products={searchedProducts} clickHandler={addToCartClickHandler}/> : null}

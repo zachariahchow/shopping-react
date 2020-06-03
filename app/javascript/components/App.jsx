@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { BrowserRouter, Router } from 'react-router-dom';
+import { BrowserRouter, Route } from 'react-router-dom';
 
 import Header from './layout/Header';
 import Nav from './layout/Nav';
@@ -104,11 +104,13 @@ const App = () => {
 
     return (
         <main>
-            <Header />
-            <Nav />
+            <BrowserRouter >
+                <Route path="/" component={Header}/>
+                <Route path="/" component={Nav}/>
                 <SearchInput changeHandler={searchInputChangeHandler} clickHandler={submitBtnClickHandler}/>
-                <Cart products={cartItems} clickHandler={removeFromCartClickHandler}/>
+                <Route path="/cart" exact render={() => <Cart products={cartItems} clickHandler={removeFromCartClickHandler}/>} />
                 {productList ? <SearchResults products={searchedProducts} clickHandler={addToCartClickHandler}/> : null}
+            </BrowserRouter>
         </main>
     );
 }

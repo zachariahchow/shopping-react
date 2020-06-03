@@ -22,6 +22,7 @@ const App = () => {
             const url = '/products.json';
             const response = await axios.get(url);
             setProductList(response.data);
+            setSearchedProducts(response.data);
 
         } catch (e) {
             console.log(e);
@@ -42,7 +43,9 @@ const App = () => {
 
         const filteredProducts = productList
             .filter(product => {
-                return product.name.toLowerCase().includes(searchInputValue.toLowerCase());
+                return (product.name.toLowerCase()
+                    .includes(searchInputValue.toLowerCase()) &&
+                    !cartItems.includes(product));
             });
 
         if (filteredProducts.length > 0)
@@ -66,19 +69,41 @@ const App = () => {
         console.log(addedProduct);
 
         if (!cartItems.find(prod => prod.id == addedProduct.id)) {
-            setCartItems(cartItems.concat(addedProduct));
+            setCartItems([...cartItems, addedProduct]);
         }
+
+        const updatedSearchItems = searchedProducts
+            .filter(prod => prod.id != addedProduct.id);
+
+        setSearchedProducts(updatedSearchItems);
     }
 
     useEffect(() => {
         console.log(cartItems);
     }, [cartItems]);
 
+    //
+
+    const removeFromCartClickHandler = (ev) => {
+        const removedProduct = cartItems.find(prod => prod.id == ev.target.dataset.productId);
+        console.log(removedProduct);
+
+        const updatedCartItems = cartItems
+            .filter(item => item.id !== removedProduct.id);
+
+        console.log(updatedCartItems);
+        setCartItems(updatedCartItems);
+
+        searchedProducts.splice(removedProduct.id - 1, 0, removedProduct);
+        console.log(searchProducts);
+        setSearchedProducts(searchedProducts);
+    }
+
     return (
         <main>
             <SearchInput changeHandler={searchInputChangeHandler} clickHandler={submitBtnClickHandler}/>
-            <Cart products={cartItems}/>
-            {productList ? <SearchResults products={productList} clickHandler={addToCartClickHandler}/> : null}
+            <Cart products={cartItems} clickHandler={removeFromCartClickHandler}/>
+            {productList ? <SearchResults products={searchedProducts} clickHandler={addToCartClickHandler}/> : null}
         </main>
     );
 }

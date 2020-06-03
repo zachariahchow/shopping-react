@@ -6,11 +6,11 @@ const SearchResults = ({ products }) => {
         return (
             <div className="product__container">
                 <div className="product-image__container">
-                    <img src={prod.url} alt="" className="product-image"/>
+                    <img src={prod.image_url} alt="" className="product-image"/>
                 </div>
-                <h3 className="product-name">{prod.name}</h3>
-                <h3 className="product-price">{prod.price}</h3>
-                <h4 className="product-description">{prod.description}</h4>
+                <h3 className="product-name">Item: {prod.name}</h3>
+                <h3 className="product-price">Price: {prod.price}</h3>
+                <h4 className="product-description">Description: {prod.description}</h4>
             </div>
         )
     })

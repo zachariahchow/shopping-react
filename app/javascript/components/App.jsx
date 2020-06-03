@@ -31,7 +31,7 @@ const App = () => {
         }
     }
 
-    getProducts();
+    useEffect(getProducts, []);
 
     return (
         <main>

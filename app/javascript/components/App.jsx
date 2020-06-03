@@ -9,6 +9,9 @@ const App = () => {
 
     const [productList, setProductList] = useState();
 
+    const [searchedProducts, setSearchedProducts] = useState([]);
+
+    const [searchInputValue, setSearchInputValue] = useState(null);
     //
 
     const getProducts = async () => {
@@ -18,8 +21,6 @@ const App = () => {
             const url = '/products.json';
 
             const response = await axios.get(url);
-
-            console.log(response.data);
 
             setProductList(response.data);
 
@@ -35,9 +36,36 @@ const App = () => {
         getProducts();
     }, []);
 
+    //
+
+    const searchInputChangeHandler = (ev) => {
+        setSearchInputValue(ev.target.value);
+        console.log(searchInputValue);
+    }
+
+    const submitBtnClickHandler = (ev) => {
+
+        const filteredProducts = productList
+            .filter(product => {
+                console.log(product.name.toLowerCase());
+                console.log(searchInputValue);
+                return product.name.toLowerCase().includes(searchInputValue.toLowerCase());
+            });
+
+        console.log(filteredProducts);
+
+        if (filteredProducts.length > 0)
+            setSearchedProducts(filteredProducts);
+    }
+
+    useEffect(() => {
+        setProductList(searchedProducts);
+        console.log(searchedProducts);
+    }, [searchedProducts]);
+
     return (
         <main>
-            <SearchInput />
+            <SearchInput changeHandler={searchInputChangeHandler} clickHandler={submitBtnClickHandler}/>
             {productList ? <SearchResults products={productList}/> : null}
         </main>
     );

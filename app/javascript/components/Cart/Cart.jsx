@@ -16,9 +16,20 @@ const Cart = ({ products, clickHandler }) => {
         )
     })
 
+    const subtotal = products.reduce((acc, prod) => {
+        return acc + prod.price;
+    }, 0)
+
+    const gst = (subtotal * 1.07);
+
+    const total = subtotal + gst + 7
+
     return (
         <div className="cart__container">
             <h2 className="cart__header">Cart</h2>
+            <h4 className="cart__subtotal">Subtotal: ${subtotal.toFixed(2)}</h4>
+            <h4 className="cart__gst">GST(7%): ${gst.toFixed(2)}</h4>
+            <h4 className="cart__total">Total: ${cartItems.length ? `${total.toFixed(2)} (incl. $7 shipping fee)` : 0}</h4>
             {cartItems}
         </div>
     );

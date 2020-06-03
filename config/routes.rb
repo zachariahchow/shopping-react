@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
   devise_for :users
-  get '/products', action: :index, controller: 'home'
+  get '/allproducts', action: :index, controller: 'home'
+  resources :products
   get 'home/index'
   root 'home#index'
   get '/cart', action: :index, controller: 'home'

@@ -1,20 +1,33 @@
 import React from 'react';
+import ShopContext from '../../context/shop-context';
 
-const Cart = ({ products, clickHandler }) => {
+const Cart = ({ products }) => {
 
-    const cartItems = products.map(prod => {
-        return (
-            <div className="cart-product__container">
-                <div className="product-image__container">
-                    <img src={prod.image_url} alt="" className="product-image"/>
+    let cartItems;
+
+    if (products) {
+        cartItems = products.map(prod => {
+
+            return (
+                <ShopContext.Consumer>
+                    {context =>
+                <div className="cart-product__container">
+                    <div className="product-image__container">
+                        <img src={prod.image_url} alt="" className="product-image"/>
+                    </div>
+                    <h3 className="product-name">Item: {prod.name}</h3>
+                    <h3 className="product-price">Price: {prod.price}</h3>
+                    <h4 className="product-description">Description: {prod.description}</h4>
+                    <button className="product-delete-cart__btn" data-product-id={prod.id} onClick={context.removeFromCartClickHandler}>Remove from Cart</button>
                 </div>
-                <h3 className="product-name">Item: {prod.name}</h3>
-                <h3 className="product-price">Price: {prod.price}</h3>
-                <h4 className="product-description">Description: {prod.description}</h4>
-                <button className="product-delete-cart__btn" data-product-id={prod.id} onClick={clickHandler}>Remove from Cart</button>
-            </div>
-        )
-    })
+                }
+            </ShopContext.Consumer>
+            )
+        })
+
+    } else {
+        cartItems = null;
+    }
 
     const subtotal = products.reduce((acc, prod) => {
         return acc + prod.price;

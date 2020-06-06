@@ -2,9 +2,13 @@ import React from 'react';
 
 const Cart = ({ products, clickHandler }) => {
 
-    const cartItems = products.map(prod => {
-        return (
-            <div className="cart-product__container">
+    let cartItems;
+
+    if (products) {
+        cartItems = products.map(prod => {
+
+            return (
+                <div className="cart-product__container">
                 <div className="product-image__container">
                     <img src={prod.image_url} alt="" className="product-image"/>
                 </div>
@@ -13,8 +17,12 @@ const Cart = ({ products, clickHandler }) => {
                 <h4 className="product-description">Description: {prod.description}</h4>
                 <button className="product-delete-cart__btn" data-product-id={prod.id} onClick={clickHandler}>Remove from Cart</button>
             </div>
-        )
-    })
+            )
+        })
+
+    } else {
+        cartItems = null;
+    }
 
     const subtotal = products.reduce((acc, prod) => {
         return acc + prod.price;

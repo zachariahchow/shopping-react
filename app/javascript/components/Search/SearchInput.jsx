@@ -1,11 +1,16 @@
 import React from 'react';
+import ShopContext from '../../context/shop-context';
 
-const SearchInput = ({ changeHandler, clickHandler }) => {
+const SearchInput = () => {
     return (
-        <div className="search-input__container">
-            <input type="text" className="search-input" onChange={changeHandler}/>
-            <button className="search-submit__btn" onClick={clickHandler}>Search</button>
-        </div>
+        <ShopContext.Consumer>
+            {context =>
+                <div className="search-input__container">
+                    <input type="text" className="search-input" onChange={context.changeHandler}/>
+                    <button className="search-submit__btn" onClick={context.submitBtnClickHandler}>Search</button>
+                </div>
+            }
+        </ShopContext.Consumer>
     );
 }
 

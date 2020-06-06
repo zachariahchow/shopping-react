@@ -7,6 +7,7 @@ import Nav from './layout/Nav';
 import SearchInput from './Search/SearchInput';
 import SearchResults from './Search/SearchResults';
 import Cart from './Cart/Cart';
+import ShopContext from '../context/shop-context';
 
 //Reducers
 
@@ -147,9 +148,20 @@ const App = () => {
             <BrowserRouter >
                 <Route path="/" component={Header}/>
                 <Route path="/" component={Nav}/>
-                <SearchInput changeHandler={searchInputChangeHandler} clickHandler={submitBtnClickHandler}/>
-                <Route path="/cart" exact render={() => <Cart products={cartProducts} clickHandler={removeFromCartClickHandler}/>} />
-                {productList && <Route path="/" exact render={() => <SearchResults products={searchedProducts} clickHandler={addToCartClickHandler}/>} />}
+                <ShopContext.Provider
+                    value={
+                        {
+                            changeHandler: searchInputChangeHandler,
+                            submitBtnClickHandler: submitBtnClickHandler,
+                            addToCartClickHandler: addToCartClickHandler,
+                            removeFromCartClickHandler: removeFromCartClickHandler
+                        }
+                    }
+                >
+                    <SearchInput />
+                    <Route path="/cart" exact render={() => <Cart products={cartProducts} clickHandler={removeFromCartClickHandler}/>} />
+                    {productList && <Route path="/" exact render={() => <SearchResults products={searchedProducts} clickHandler={addToCartClickHandler}/>} />}
+                </ShopContext.Provider>
             </BrowserRouter>
         </main>
     );

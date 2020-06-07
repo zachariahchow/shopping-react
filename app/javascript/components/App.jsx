@@ -8,6 +8,7 @@ import SearchInput from './Search/SearchInput';
 import SearchResults from './Search/SearchResults';
 import Cart from './Cart/Cart';
 import ShopContext from '../context/shop-context';
+import useHttp from '../hooks/http';
 
 //Reducers
 
@@ -24,30 +25,30 @@ const cartReducer = (curCart, action) => {
     }
 }
 
-const httpReducer = (httpState, action) => {
-    switch (action.type) {
-        case 'SEND':
-            return { loading: true, error: null };
-        case 'RESPONSE':
-            return { ...httpState, loading: false };
-        case 'ERROR':
-            return { ...httpState, error: action.errorMessage };
-        case 'CLEAR':
-            return { ...httpState, error: null };
-        default:
-            throw new Error('Bad!');
-    }
-}
+// const httpReducer = (httpState, action) => {
+//     switch (action.type) {
+//         case 'SEND':
+//             return { loading: true, error: null };
+//         case 'RESPONSE':
+//             return { ...httpState, loading: false };
+//         case 'ERROR':
+//             return { ...httpState, error: action.errorMessage };
+//         case 'CLEAR':
+//             return { ...httpState, error: null };
+//         default:
+//             throw new Error('Bad!');
+//     }
+// }
 
 const App = () => {
 
     //States
 
     const [cartProducts, dispatchCart] = useReducer(cartReducer, []);
-    const [httpState, dispatchHttp] = useReducer(httpReducer, {
-        loading: false,
-        error: null
-    })
+    // const [httpState, dispatchHttp] = useReducer(httpReducer, {
+    //     loading: false,
+    //     error: null
+    // })
     const [productList, setProductList] = useState();
     const [searchedProducts, setSearchedProducts] = useState([]);
     const [searchInputValue, setSearchInputValue] = useState(null);
@@ -55,20 +56,24 @@ const App = () => {
 
     //
 
+    const { responseData, error, sendGetRequest } = useHttp();
+
+    //
+
     const getProducts = async () => {
-        dispatchHttp({ type: 'SEND' });
 
         try {
 
             const url = '/products.json';
-            const response = await axios.get(url);
-            dispatchHttp({ type: 'RESPONSE' });
-            setProductList(response.data);
-            setSearchedProducts(response.data);
+            await sendGetRequest(url);
 
         } catch (e) {
-            dispatchHttp({ type: 'ERROR', errorMessage: 'Some shit happened' });
+            console.log(error);
         }
+
+        console.log("DATA" + responseData);
+        setProductList(responseData);
+        setSearchedProducts(responseData);
     }
 
     useEffect(() => {
